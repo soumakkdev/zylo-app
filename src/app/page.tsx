@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import SideNav from '@/modules/layout/SideNav'
 import { redirect } from 'next/navigation'
 
 export default async function Home() {
@@ -12,5 +13,9 @@ export default async function Home() {
 		return redirect('/login')
 	}
 
-	return <main>Home</main>
+	return (
+		<main className="h-full flex">
+			<SideNav user={user} />
+		</main>
+	)
 }
