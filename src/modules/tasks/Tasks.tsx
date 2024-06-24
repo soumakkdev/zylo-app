@@ -36,7 +36,7 @@ export default function Tasks() {
 				</Button>
 			</header>
 
-			<div className="flex items-center justify-between px-4 my-3">
+			{/* <div className="flex items-center justify-between px-4 my-3">
 				<TasksFilters statusList={statusList} />
 
 				<ToggleGroup type="single" value={currentView} onValueChange={(value: TasksViews) => setCurrentView(value)}>
@@ -63,9 +63,9 @@ export default function Tasks() {
 				) : currentView === TasksViews.Calendar ? (
 					<CalendarView tasks={tasksList} />
 				) : null}
-			</>
+			</> */}
 
-			<AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} />
+			{/* <AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} /> */}
 		</div>
 	)
 }

@@ -17,11 +17,12 @@ import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
 import { ListChecks, Notebook, Search, Star, Trash2, User2 } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import NavButton from './NavButton'
 
 export default function SideNav({ user }: { user: User }) {
 	const router = useRouter()
+	const params = useParams()
 	const supabase = createClient()
 	const { theme, setTheme } = useTheme()
 
@@ -33,8 +34,8 @@ export default function SideNav({ user }: { user: User }) {
 	return (
 		<div className="w-14 border-r h-full py-4 flex flex-col">
 			<div className="flex flex-col items-center gap-3 flex-1">
-				<NavButton Icon={ListChecks} isActive onClick={() => router.push('/')} />
-				<NavButton Icon={Notebook} onClick={() => router.push('/')} />
+				<NavButton Icon={ListChecks} isActive onClick={() => router.push(`/project/${params.projectId}/tasks`)} />
+				<NavButton Icon={Notebook} onClick={() => router.push(`/project/${params.projectId}/notes`)} />
 			</div>
 
 			<div className="flex flex-col items-center gap-2">
