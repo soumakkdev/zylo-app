@@ -1,16 +1,16 @@
 'use client'
+import { Button } from '@/components/ui/button'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useAtom } from 'jotai'
 import { Calendar, Loader, Plus, SquareKanban, Table } from 'lucide-react'
 import { useState } from 'react'
+import TasksFilters from './components/TasksFilters'
 import { useStatus, useTasks } from './helpers/Tasks.query'
 import { TasksViews, currentViewAtom } from './helpers/Tasks.utils'
-import AddTaskDialog from './components/AddTaskDialog'
-import TasksFilters from './components/TasksFilters'
 import KanbanView from './views/KanbanView'
 import TableView from './views/TableView'
 import CalendarView from './views/calendar/CalendarView'
-import { Button } from '@/components/ui/button'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import AddTaskDialog from './components/AddTaskDialog'
 
 export default function Tasks() {
 	const [currentView, setCurrentView] = useAtom(currentViewAtom)
@@ -36,7 +36,7 @@ export default function Tasks() {
 				</Button>
 			</header>
 
-			{/* <div className="flex items-center justify-between px-4 my-3">
+			<div className="flex items-center justify-between px-4 my-3">
 				<TasksFilters statusList={statusList} />
 
 				<ToggleGroup type="single" value={currentView} onValueChange={(value: TasksViews) => setCurrentView(value)}>
@@ -63,9 +63,9 @@ export default function Tasks() {
 				) : currentView === TasksViews.Calendar ? (
 					<CalendarView tasks={tasksList} />
 				) : null}
-			</> */}
+			</>
 
-			{/* <AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} /> */}
+			<AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} />
 		</div>
 	)
 }

@@ -10,9 +10,12 @@ import { PriorityOptions } from '../helpers/Tasks.utils'
 import { IAddTaskBody, IStatus } from '@/types/tasks'
 import { DatePicker } from '@/components/widgets/DatePicker'
 import { useAddTask } from '../helpers/Tasks.query'
+import { useParams } from 'next/navigation'
 
 export default function AddTaskDialog({ open, onClose, statusList }: { open: boolean; onClose: () => void; statusList: IStatus[] }) {
 	const addTaskMutation = useAddTask()
+	const params = useParams()
+	const projectId = params.projectId as string
 
 	const form = useForm({
 		defaultValues: {
@@ -20,15 +23,16 @@ export default function AddTaskDialog({ open, onClose, statusList }: { open: boo
 			description: '',
 			priority: '',
 			status: '',
-			date: '',
+			due_date: '',
 		},
 		onSubmit: async ({ value }) => {
 			const reqBody: IAddTaskBody = {
-				date: value.date,
+				due_date: value.due_date,
 				priority: value.priority,
 				title: value.title,
 				description: value?.description ?? null,
-				status_id: parseInt(value?.status),
+				status_id: value?.status,
+				project_id: projectId,
 			}
 			addTaskMutation.mutate(reqBody, {
 				onSettled: () => {
@@ -104,10 +108,10 @@ export default function AddTaskDialog({ open, onClose, statusList }: { open: boo
 					)}
 				</form.Field>
 
-				<form.Field name="date">
+				<form.Field name="due_date">
 					{(field) => (
 						<div className="space-y-1">
-							<Label htmlFor={field.name}>Date</Label>
+							<Label htmlFor={field.name}>Due Date</Label>
 							<DatePicker id={field.name} value={field.state.value} onChange={(value) => field.handleChange(value)} />
 						</div>
 					)}

@@ -4,12 +4,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { tasksFilterAtom } from './Tasks.utils'
 import { isEmpty } from 'radash'
+import { useParams } from 'next/navigation'
 
 export function useTasks() {
 	const taskFilters = useAtomValue(tasksFilterAtom)
+	const params = useParams()
+	const reqParams = { ...taskFilters, projectId: params.projectId as string }
 	return useQuery({
-		queryKey: ['tasks', taskFilters],
-		queryFn: async () => fetchTasks(taskFilters),
+		queryKey: ['tasks', reqParams],
+		queryFn: async () => fetchTasks(reqParams),
 	})
 }
 
@@ -31,11 +34,11 @@ export function useAddTask() {
 	})
 }
 
-async function fetchTasks(params?: ITaskQuery) {
+async function fetchTasks(params: ITaskQuery) {
 	const supabase = createClient()
-	const { status, priority, search } = params
+	const { status, priority, search, projectId } = params
 
-	let query = supabase.from('tasks').select(`*, status:status_id(*)`)
+	let query = supabase.from('tasks').select(`*, status:status_id(*)`).eq('project_id', projectId)
 	if (!isEmpty(status)) {
 		query = query.in('status_id', status)
 	}

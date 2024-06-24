@@ -9,10 +9,10 @@ export enum TasksViews {
 export const currentViewAtom = atom(TasksViews.Table)
 
 export enum TaskPriority {
-	Urgent = '1',
-	High = '2',
-	Normal = '3',
-	Low = '4',
+	Urgent = 'Urgent',
+	High = 'High',
+	Normal = 'Normal',
+	Low = 'Low',
 }
 
 export const PriorityOptions = [
@@ -33,10 +33,6 @@ export const PriorityOptions = [
 		value: TaskPriority.Low,
 	},
 ]
-
-export function getPriorityName(priority: TaskPriority) {
-	return PriorityOptions?.find((p) => p.value === priority)?.label ?? null
-}
 
 export const searchQueryAtom = atom('')
 export const statusFilterAtom = atom<string[] | null>(null)
