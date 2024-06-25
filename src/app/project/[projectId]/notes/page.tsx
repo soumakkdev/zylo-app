@@ -1,5 +1,5 @@
-import React from 'react'
+import Notes from '@/modules/notes/Notes'
 
 export default function NotesPage() {
-	return <div>NotesPage</div>
+	return <Notes />
 }

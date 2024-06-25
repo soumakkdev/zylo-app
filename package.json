@@ -3,12 +3,15 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"dev": "next dev --turbo",
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@blocknote/core": "^0.14.2",
+		"@blocknote/mantine": "^0.14.2",
+		"@blocknote/react": "^0.14.2",
 		"@radix-ui/react-checkbox": "^1.1.0",
 		"@radix-ui/react-dialog": "^1.1.1",
 		"@radix-ui/react-dropdown-menu": "^2.1.1",
@@ -16,6 +19,7 @@
 		"@radix-ui/react-popover": "^1.1.1",
 		"@radix-ui/react-select": "^2.1.1",
 		"@radix-ui/react-slot": "^1.1.0",
+		"@radix-ui/react-tabs": "^1.1.0",
 		"@radix-ui/react-toggle": "^1.1.0",
 		"@radix-ui/react-toggle-group": "^1.1.0",
 		"@supabase/ssr": "^0.3.0",
@@ -29,6 +33,7 @@
 		"cmdk": "^0.2.0",
 		"date-fns": "^3.6.0",
 		"dayjs": "^1.11.11",
+		"immer": "^10.1.1",
 		"jotai": "^2.8.3",
 		"lucide-react": "^0.396.0",
 		"next": "14.2.4",
@@ -37,6 +42,7 @@
 		"react": "^18",
 		"react-day-picker": "^8.10.1",
 		"react-dom": "^18",
+		"react-hotkeys-hook": "^4.5.0",
 		"tailwind-merge": "^2.3.0",
 		"tailwindcss-animate": "^1.0.7"
 	},

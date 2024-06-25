@@ -1,0 +1,8 @@
+/* Changes for dark mode */
+.bn-container[data-custom-theme][data-color-scheme='dark'] {
+	--bn-colors-editor-background: hsl(0 0% 11%);
+}
+
+.bn-container > div:has(.bn-side-menu) {
+	z-index: 10 !important;
+}

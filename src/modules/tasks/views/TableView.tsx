@@ -3,6 +3,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { IStatus, ITask } from '@/types/tasks'
 import { TaskPriority } from '../helpers/Tasks.utils'
 import DataTable from '@/components/widgets/DataTable'
+import DataGrid from '@/components/widgets/DataGrid'
 
 export default function TableView({ tasks }: { tasks: ITask[] }) {
 	const columns: ColumnDef<any>[] = [
@@ -48,5 +49,5 @@ export default function TableView({ tasks }: { tasks: ITask[] }) {
 		},
 	]
 
-	return <DataTable columns={columns} data={tasks} />
+	return <DataGrid columns={columns} data={tasks} />
 }
