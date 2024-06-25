@@ -1,25 +1,31 @@
 import { Input } from '@/components/ui/input'
-import { MultiSelectDropdown } from '@/components/widgets/MultiSelectDropdown'
-import { IStatus } from '@/types/tasks'
+import { MultiDropdown } from '@/components/widgets/MultiDropdown'
+import { IStatus, ITag } from '@/types/tasks'
 import { useAtom } from 'jotai'
-import { CircleCheck, Flag } from 'lucide-react'
-import { PriorityOptions, priorityFilterAtom, searchQueryAtom, statusFilterAtom } from '../helpers/Tasks.utils'
+import { CircleCheck, Flag, Tag } from 'lucide-react'
+import { PriorityOptions, priorityFilterAtom, searchQueryAtom, statusFilterAtom, tagsFilterAtom } from '../helpers/Tasks.utils'
 
-export default function TasksFilters({ statusList }: { statusList: IStatus[] }) {
+export default function TasksFilters({ statusList, tagsList }: { statusList: IStatus[]; tagsList: ITag[] }) {
 	const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
 	const [statusFilter, setStatusFilter] = useAtom(statusFilterAtom)
+	const [tagsFilter, setTagsFilter] = useAtom(tagsFilterAtom)
 	const [priorityFilter, setPriorityFilter] = useAtom(priorityFilterAtom)
 
 	const statusOptions = statusList?.map((status) => ({
 		label: status.name,
-		value: status.id.toString(),
+		value: status.id,
+	}))
+
+	const tagsOptions = tagsList?.map((tag) => ({
+		label: tag.name,
+		value: tag.id,
 	}))
 
 	return (
 		<div className="flex items-center gap-3">
 			<Input placeholder="Search tasks" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
 
-			<MultiSelectDropdown
+			<MultiDropdown
 				trigger={
 					<>
 						<CircleCheck className="h-4 w-4" />
@@ -32,7 +38,20 @@ export default function TasksFilters({ statusList }: { statusList: IStatus[] }) 
 				onSelect={(selected) => setStatusFilter(selected)}
 			/>
 
-			<MultiSelectDropdown
+			<MultiDropdown
+				trigger={
+					<>
+						<Tag className="h-4 w-4" />
+						<span>Tags</span>
+					</>
+				}
+				options={tagsOptions}
+				title="tags"
+				selected={tagsFilter}
+				onSelect={(selected) => setTagsFilter(selected)}
+			/>
+
+			<MultiDropdown
 				trigger={
 					<>
 						<Flag className="h-4 w-4" />

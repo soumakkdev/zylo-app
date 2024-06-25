@@ -19,6 +19,13 @@ export interface IStatus {
 	updated_at: string
 }
 
+export interface ITag {
+	id: string
+	name: string
+	color: string
+	created_at: string
+}
+
 export interface IAddTaskBody {
 	title: string
 	description?: string | null
@@ -26,11 +33,14 @@ export interface IAddTaskBody {
 	due_date: string
 	status_id: string
 	project_id: string
+	user_id: string
+	tag_ids?: string[]
 }
 
 export interface ITaskQuery {
 	status?: string[] | null
 	priority?: string[] | null
+	tags?: string[] | null
 	search?: string | null
 	projectId: string
 }

@@ -2,32 +2,32 @@
 
 import * as React from 'react'
 
-import { Badge } from '../ui/badge'
+import { ChevronsUpDown } from 'lucide-react'
+import { isEmpty } from 'radash'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { ISelectOption } from './Select'
 
-export function MultiSelectDropdown(props: {
-	selected: string[]
-	onSelect: (selected: string[]) => void
-	options: ISelectOption[]
-	title: string
-	trigger?: React.ReactNode
-}) {
-	const { options, title, selected, trigger, onSelect } = props
+export function MultiSelect(props: { id?: string; value: string[]; onChange: (selected: string[]) => void; options: ISelectOption[]; title: string }) {
+	const { id, options, title, value, onChange } = props
 	const [open, setOpen] = React.useState(false)
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				<Button variant="outline" role="combobox" aria-expanded={open} className="relative gap-1">
-					{trigger ?? <span className="capitalize">{title}</span>}
-					{selected?.length ? <Badge className="ml-1 text-xs h-5 w-5 p-0 grid place-content-center">{selected?.length}</Badge> : null}
+				<Button id={id} variant="outline" role="combobox" aria-expanded={open} className="flex w-full justify-between">
+					{!isEmpty(value)
+						? options
+								.filter((opt) => value?.includes(opt.value))
+								?.map((opt) => opt.label)
+								.join(', ')
+						: 'Select options'}
+					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[200px] p-0">
+			<PopoverContent className="p-0" align="start">
 				<Command>
 					<CommandInput placeholder={`Search ${title}`} />
 					<CommandEmpty>No {title} found.</CommandEmpty>
@@ -37,16 +37,16 @@ export function MultiSelectDropdown(props: {
 								key={opt.value}
 								value={opt.value}
 								onSelect={(currentValue) => {
-									const temp = new Set(selected)
+									const temp = new Set(value)
 									if (temp.has(currentValue)) {
 										temp.delete(currentValue)
 									} else {
 										temp.add(currentValue)
 									}
-									onSelect(Array.from(temp))
+									onChange(Array.from(temp))
 								}}
 							>
-								<Checkbox checked={selected?.includes(opt.value)} className="mr-2" />
+								<Checkbox checked={value?.includes(opt.value)} className="mr-2" />
 								{opt.label}
 							</CommandItem>
 						))}

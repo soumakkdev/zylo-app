@@ -16,7 +16,7 @@ export default function TableView({ tasks }: { tasks: ITask[] }) {
 			cell: ({ getValue }) => {
 				const priority = getValue() as TaskPriority
 				if (!priority) return null
-				return <p>{priority}</p>
+				return <p className="capitalize">{priority}</p>
 			},
 		},
 		{

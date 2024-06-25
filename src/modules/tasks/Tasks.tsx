@@ -5,7 +5,7 @@ import { useAtom } from 'jotai'
 import { Calendar, Loader, Plus, SquareKanban, Table } from 'lucide-react'
 import { useState } from 'react'
 import TasksFilters from './components/TasksFilters'
-import { useStatus, useTasks } from './helpers/Tasks.query'
+import { useStatus, useTags, useTasks } from './helpers/Tasks.query'
 import { TasksViews, currentViewAtom } from './helpers/Tasks.utils'
 import KanbanView from './views/KanbanView'
 import TableView from './views/TableView'
@@ -18,8 +18,9 @@ export default function Tasks() {
 
 	const { data: tasksList, isLoading } = useTasks()
 	const { data: statusList, isLoading: isStatusLoading } = useStatus()
+	const { data: tagsList, isLoading: isTagsLoading } = useTags()
 
-	if (isLoading || isStatusLoading)
+	if (isLoading || isStatusLoading || isTagsLoading)
 		return (
 			<div className="h-full w-full grid place-content-center">
 				<Loader className="animate-spin h-5 w-5" />
@@ -37,7 +38,7 @@ export default function Tasks() {
 			</header>
 
 			<div className="flex items-center justify-between px-4 my-3">
-				<TasksFilters statusList={statusList} />
+				<TasksFilters statusList={statusList} tagsList={tagsList} />
 
 				<ToggleGroup type="single" value={currentView} onValueChange={(value: TasksViews) => setCurrentView(value)}>
 					<ToggleGroupItem value={TasksViews.Table} className="h-8 gap-1 rounded-lg px-2">
@@ -65,7 +66,7 @@ export default function Tasks() {
 				) : null}
 			</>
 
-			<AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} />
+			<AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} tagsList={tagsList} />
 		</div>
 	)
 }

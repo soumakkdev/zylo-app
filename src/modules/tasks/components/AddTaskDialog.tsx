@@ -2,20 +2,32 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import Modal from '@/components/widgets/Modal'
-import Select from '@/components/widgets/Select'
-import { useForm } from '@tanstack/react-form'
-import React from 'react'
-import { PriorityOptions } from '../helpers/Tasks.utils'
-import { IAddTaskBody, IStatus } from '@/types/tasks'
 import { DatePicker } from '@/components/widgets/DatePicker'
-import { useAddTask } from '../helpers/Tasks.query'
+import Modal from '@/components/widgets/Modal'
+import { MultiSelect } from '@/components/widgets/MultiSelect'
+import Select from '@/components/widgets/Select'
+import { useAuth } from '@/lib/AuthProvider'
+import { IAddTaskBody, IStatus, ITag } from '@/types/tasks'
+import { useForm } from '@tanstack/react-form'
 import { useParams } from 'next/navigation'
+import { useAddTask } from '../helpers/Tasks.query'
+import { PriorityOptions } from '../helpers/Tasks.utils'
 
-export default function AddTaskDialog({ open, onClose, statusList }: { open: boolean; onClose: () => void; statusList: IStatus[] }) {
+export default function AddTaskDialog({
+	open,
+	onClose,
+	statusList,
+	tagsList,
+}: {
+	open: boolean
+	onClose: () => void
+	statusList: IStatus[]
+	tagsList: ITag[]
+}) {
 	const addTaskMutation = useAddTask()
 	const params = useParams()
 	const projectId = params.projectId as string
+	const { user } = useAuth()
 
 	const form = useForm({
 		defaultValues: {
@@ -24,6 +36,7 @@ export default function AddTaskDialog({ open, onClose, statusList }: { open: boo
 			priority: '',
 			status: '',
 			due_date: '',
+			tags: [],
 		},
 		onSubmit: async ({ value }) => {
 			const reqBody: IAddTaskBody = {
@@ -33,6 +46,8 @@ export default function AddTaskDialog({ open, onClose, statusList }: { open: boo
 				description: value?.description ?? null,
 				status_id: value?.status,
 				project_id: projectId,
+				user_id: user?.id,
+				tag_ids: value?.tags,
 			}
 			addTaskMutation.mutate(reqBody, {
 				onSettled: () => {
@@ -45,6 +60,11 @@ export default function AddTaskDialog({ open, onClose, statusList }: { open: boo
 	const statusOptions = statusList?.map((status) => ({
 		label: status.name,
 		value: status.id.toString(),
+	}))
+
+	const tagsOptions = tagsList?.map((tag) => ({
+		label: tag.name,
+		value: tag.id,
 	}))
 
 	return (
@@ -104,6 +124,21 @@ export default function AddTaskDialog({ open, onClose, statusList }: { open: boo
 						<div className="space-y-1">
 							<Label htmlFor={field.name}>Status</Label>
 							<Select id={field.name} value={field.state.value} onChange={(value) => field.handleChange(value)} options={statusOptions} />
+						</div>
+					)}
+				</form.Field>
+
+				<form.Field name="tags">
+					{(field) => (
+						<div className="space-y-1">
+							<Label htmlFor={field.name}>Tags</Label>
+							<MultiSelect
+								title="tags"
+								id={field.name}
+								value={field.state.value}
+								onChange={(selected) => field.handleChange(selected)}
+								options={tagsOptions}
+							/>
 						</div>
 					)}
 				</form.Field>

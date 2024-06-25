@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/client'
-import { IAddTaskBody, IStatus, ITask, ITaskQuery } from '@/types/tasks'
+import { IAddTaskBody, IStatus, ITag, ITask, ITaskQuery } from '@/types/tasks'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { tasksFilterAtom } from './Tasks.utils'
@@ -23,6 +23,13 @@ export function useStatus() {
 	})
 }
 
+export function useTags() {
+	return useQuery({
+		queryKey: ['tags'],
+		queryFn: fetchTags,
+	})
+}
+
 export function useAddTask() {
 	const queryClient = useQueryClient()
 
@@ -36,7 +43,7 @@ export function useAddTask() {
 
 async function fetchTasks(params: ITaskQuery) {
 	const supabase = createClient()
-	const { status, priority, search, projectId } = params
+	const { status, priority, search, tags, projectId } = params
 
 	let query = supabase.from('tasks').select(`*, status:status_id(*)`).eq('project_id', projectId)
 	if (!isEmpty(status)) {
@@ -44,6 +51,11 @@ async function fetchTasks(params: ITaskQuery) {
 	}
 	if (!isEmpty(priority)) {
 		query = query.in('priority', priority)
+	}
+	if (!isEmpty(tags)) {
+		// we are making an or query where tag ids contains tag1 or tag2
+		const orQuery = tags.map((tag) => `tag_ids.cs.{${tag}}`).join(',')
+		query = query.or(orQuery)
 	}
 	// if (search) {
 	// 	query = query.like('title', search)
@@ -57,6 +69,12 @@ async function fetchStatus() {
 	const supabase = createClient()
 	const { data } = await supabase.from('status').select('*')
 	return data as IStatus[]
+}
+
+async function fetchTags() {
+	const supabase = createClient()
+	const { data } = await supabase.from('tags').select('*')
+	return data as ITag[]
 }
 
 async function addTask(task: IAddTaskBody) {
