@@ -10,7 +10,7 @@ export default function ViewDates({ arrayOfDays, tasks }: { arrayOfDays: IFormat
 
 	arrayOfDays.forEach((week) => {
 		week.forEach((d) => {
-			const currentDateTasks = tasks?.filter((task) => dayjs(task.date).isSame(dayjs(d.isoDate), 'date'))
+			const currentDateTasks = tasks?.filter((task) => dayjs(task.due_date).isSame(dayjs(d.isoDate), 'date'))
 			days.push(
 				<div
 					key={d.date}
