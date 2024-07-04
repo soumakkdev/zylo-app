@@ -11,16 +11,19 @@ import KanbanView from './views/KanbanView'
 import TableView from './views/TableView'
 import CalendarView from './views/calendar/CalendarView'
 import AddTaskDialog from './components/AddTaskDialog'
+import { ITask } from '@/types/tasks'
+import ViewTaskDetails from './components/ViewTaskDetails'
 
 export default function Tasks() {
 	const [currentView, setCurrentView] = useAtom(currentViewAtom)
 	const [isAddTaskDialogOpen, setIsAddTaskDialogOpen] = useState(false)
+	const [selectedTaskToView, setSelectedTaskToView] = useState(null)
 
 	const { data: tasksList, isLoading } = useTasks()
 	const { data: statusList, isLoading: isStatusLoading } = useStatus()
 	const { data: tagsList, isLoading: isTagsLoading } = useTags()
 
-	if (isLoading || isStatusLoading || isTagsLoading)
+	if (isStatusLoading || isTagsLoading)
 		return (
 			<div className="h-full w-full grid place-content-center">
 				<Loader className="animate-spin h-5 w-5" />
@@ -58,15 +61,21 @@ export default function Tasks() {
 
 			<>
 				{currentView === TasksViews.Table ? (
-					<TableView tasks={tasksList} />
+					<TableView tasks={tasksList} isTasksLoading={isLoading} onViewTask={(task) => setSelectedTaskToView(task)} />
 				) : currentView === TasksViews.Kanban ? (
-					<KanbanView tasks={tasksList} statusList={statusList} />
+					<KanbanView tasks={tasksList} statusList={statusList} onViewTask={(task) => setSelectedTaskToView(task)} />
 				) : currentView === TasksViews.Calendar ? (
 					<CalendarView tasks={tasksList} />
 				) : null}
 			</>
 
-			<AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} tagsList={tagsList} />
+			{isAddTaskDialogOpen && (
+				<AddTaskDialog open={isAddTaskDialogOpen} onClose={() => setIsAddTaskDialogOpen(false)} statusList={statusList} tagsList={tagsList} />
+			)}
+
+			{selectedTaskToView !== null && (
+				<ViewTaskDetails open={selectedTaskToView !== null} onClose={() => setSelectedTaskToView(null)} task={selectedTaskToView} />
+			)}
 		</div>
 	)
 }

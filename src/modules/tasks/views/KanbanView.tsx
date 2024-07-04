@@ -1,8 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { IStatus, ITask } from '@/types/tasks'
-import React from 'react'
 
-export default function KanbanView({ tasks, statusList }: { tasks: ITask[]; statusList: IStatus[] }) {
+export default function KanbanView({ tasks, statusList, onViewTask }: { tasks: ITask[]; statusList: IStatus[]; onViewTask: (task: ITask) => void }) {
 	return (
 		<div className="flex gap-4 flex-1 px-4 pb-4">
 			{statusList?.map((status) => {
@@ -30,7 +29,7 @@ export default function KanbanView({ tasks, statusList }: { tasks: ITask[]; stat
 
 						<div className="flex flex-col my-1 gap-2">
 							{statusTasks?.map((task) => (
-								<div key={task.id} className="bg-muted text-sm p-4 rounded-lg shadow-sm">
+								<div key={task.id} className="bg-muted text-sm p-4 rounded-lg shadow-sm" onClick={() => onViewTask(task)}>
 									{task.title}
 								</div>
 							))}

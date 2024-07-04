@@ -26,7 +26,6 @@ export default function AddTaskDialog({
 }) {
 	const addTaskMutation = useAddTask()
 	const params = useParams()
-	const projectId = params.projectId as string
 	const { user } = useAuth()
 
 	const form = useForm({
@@ -45,7 +44,6 @@ export default function AddTaskDialog({
 				title: value.title,
 				description: value?.description ?? null,
 				status_id: value?.status,
-				project_id: projectId,
 				user_id: user?.id,
 				tag_ids: value?.tags,
 			}
@@ -114,7 +112,12 @@ export default function AddTaskDialog({
 					{(field) => (
 						<div className="space-y-1">
 							<Label htmlFor={field.name}>Priority</Label>
-							<Select id={field.name} value={field.state.value} onChange={(value) => field.handleChange(value)} options={PriorityOptions} />
+							<Select
+								id={field.name}
+								value={field.state.value}
+								onChange={(value) => field.handleChange(value)}
+								options={PriorityOptions}
+							/>
 						</div>
 					)}
 				</form.Field>
@@ -123,7 +126,12 @@ export default function AddTaskDialog({
 					{(field) => (
 						<div className="space-y-1">
 							<Label htmlFor={field.name}>Status</Label>
-							<Select id={field.name} value={field.state.value} onChange={(value) => field.handleChange(value)} options={statusOptions} />
+							<Select
+								id={field.name}
+								value={field.state.value}
+								onChange={(value) => field.handleChange(value)}
+								options={statusOptions}
+							/>
 						</div>
 					)}
 				</form.Field>

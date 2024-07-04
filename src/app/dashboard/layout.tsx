@@ -1,9 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import SideNav from '@/modules/layout/SideNav'
 import { redirect } from 'next/navigation'
-import React from 'react'
+import { ReactNode } from 'react'
 
-export default async function ProjectPage() {
+export default async function ProjectLayout({ children, params }: { children: ReactNode; params?: any }) {
 	const supabase = createClient()
 
 	const {
@@ -14,5 +14,10 @@ export default async function ProjectPage() {
 		return redirect('/login')
 	}
 
-	return <div className="h-full flex">hi </div>
+	return (
+		<div className="h-full flex">
+			<SideNav user={user} />
+			{children}
+		</div>
+	)
 }

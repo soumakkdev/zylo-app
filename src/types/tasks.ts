@@ -6,7 +6,6 @@ export interface ITask {
 	priority: string
 	due_date: string
 	status_id: string
-	project_id: string
 	updated_at: string
 	status?: IStatus
 }
@@ -32,7 +31,6 @@ export interface IAddTaskBody {
 	priority: string
 	due_date: string
 	status_id: string
-	project_id: string
 	user_id: string
 	tag_ids?: string[]
 }
@@ -42,5 +40,4 @@ export interface ITaskQuery {
 	priority?: string[] | null
 	tags?: string[] | null
 	search?: string | null
-	projectId: string
 }

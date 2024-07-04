@@ -16,10 +16,12 @@ export default function Modal(props: IModal) {
 	)
 }
 
-function ModalHeader({ title }: { title: string }) {
+function ModalHeader({ title, actions }: { title: string; actions?: ReactNode }) {
 	return (
-		<DialogHeader>
+		<DialogHeader className="flex-row justify-between items-center mr-9">
 			<DialogTitle>{title}</DialogTitle>
+
+			{actions}
 		</DialogHeader>
 	)
 }

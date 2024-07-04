@@ -5,7 +5,6 @@ export interface INote {
 	created_at: string
 	id: string
 	is_important: boolean
-	project_id: string
 	user_id: string
 }
 

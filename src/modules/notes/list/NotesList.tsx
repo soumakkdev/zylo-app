@@ -7,7 +7,6 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useParams, useRouter } from 'next/navigation'
 
 export default function NotesList({ notes }: { notes: INote[] }) {
-	const { projectId } = useParams()
 	const router = useRouter()
 
 	const columns: ColumnDef<any>[] = [
@@ -35,5 +34,5 @@ export default function NotesList({ notes }: { notes: INote[] }) {
 		},
 	]
 
-	return <DataTable columns={columns} data={notes} onRowClick={(row) => router.push(`/project/${projectId}/notes/${row.original.id}`)} />
+	return <DataTable columns={columns} data={notes} onRowClick={(row) => router.push(`/dashboard/notes/${row.original.id}`)} />
 }

@@ -40,7 +40,6 @@ export const tagsFilterAtom = atom<string[]>([])
 export const priorityFilterAtom = atom<string[]>([])
 
 export const tasksFilterAtom = atom((get) => ({
-	search: get(searchQueryAtom),
 	status: get(statusFilterAtom),
 	priority: get(priorityFilterAtom),
 	tags: get(tagsFilterAtom),
