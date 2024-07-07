@@ -23,7 +23,7 @@ export function MultiDropdown(props: {
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				<Button id={id} variant="outline" role="combobox" aria-expanded={open} className="relative gap-1">
+				<Button id={id} variant="outline" size="sm" role="combobox" aria-expanded={open} className="relative gap-1.5">
 					{trigger ?? <span className="capitalize">{title}</span>}
 					{selected?.length ? <Badge className="ml-1 text-xs h-5 w-5 p-0 grid place-content-center">{selected?.length}</Badge> : null}
 				</Button>

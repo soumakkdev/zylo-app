@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
-import { ClipboardList, User2 } from 'lucide-react'
+import { ClipboardList, ListTodo, Notebook, Search, User2 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { usePathname, useRouter } from 'next/navigation'
 import NavButton from './NavButton'

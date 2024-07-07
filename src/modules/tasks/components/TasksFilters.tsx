@@ -23,7 +23,7 @@ export default function TasksFilters({ statusList, tagsList }: { statusList: ISt
 
 	return (
 		<div className="flex items-center gap-3">
-			<Input placeholder="Search tasks" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+			<Input placeholder="Search tasks" className="h-8 rounded-lg" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
 
 			<MultiDropdown
 				trigger={

@@ -2,17 +2,15 @@
 import { Button } from '@/components/ui/button'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useAtom } from 'jotai'
-import { Calendar, Loader, Plus, SquareKanban, Table } from 'lucide-react'
+import { Loader, Plus, SquareKanban, Table } from 'lucide-react'
 import { useState } from 'react'
+import AddTaskDialog from './components/AddTaskDialog'
 import TasksFilters from './components/TasksFilters'
+import ViewTaskDetails from './components/ViewTaskDetails'
 import { useStatus, useTags, useTasks } from './helpers/Tasks.query'
 import { TasksViews, currentViewAtom } from './helpers/Tasks.utils'
 import KanbanView from './views/KanbanView'
 import TableView from './views/TableView'
-import CalendarView from './views/calendar/CalendarView'
-import AddTaskDialog from './components/AddTaskDialog'
-import { ITask } from '@/types/tasks'
-import ViewTaskDetails from './components/ViewTaskDetails'
 
 export default function Tasks() {
 	const [currentView, setCurrentView] = useAtom(currentViewAtom)
@@ -52,20 +50,20 @@ export default function Tasks() {
 						<SquareKanban className="h-4 w-4" />
 						<span>Board</span>
 					</ToggleGroupItem>
-					<ToggleGroupItem value={TasksViews.Calendar} className="h-8 gap-1 rounded-lg px-2">
-						<Calendar className="h-4 w-4" />
-						<span>Calendar</span>
-					</ToggleGroupItem>
 				</ToggleGroup>
 			</div>
 
 			<>
 				{currentView === TasksViews.Table ? (
-					<TableView tasks={tasksList} isTasksLoading={isLoading} onViewTask={(task) => setSelectedTaskToView(task)} />
+					<TableView
+						tasks={tasksList}
+						isTasksLoading={isLoading}
+						statusList={statusList}
+						tagsList={tagsList}
+						onViewTask={(task) => setSelectedTaskToView(task)}
+					/>
 				) : currentView === TasksViews.Kanban ? (
 					<KanbanView tasks={tasksList} statusList={statusList} onViewTask={(task) => setSelectedTaskToView(task)} />
-				) : currentView === TasksViews.Calendar ? (
-					<CalendarView tasks={tasksList} />
 				) : null}
 			</>
 
