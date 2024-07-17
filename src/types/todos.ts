@@ -6,3 +6,8 @@ export interface ITodo {
 	updated_at: string
 	user_id: string
 }
+
+export interface ICreateTodo {
+	title: string
+	user_id: string
+}
