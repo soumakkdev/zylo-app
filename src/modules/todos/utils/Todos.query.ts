@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/client'
-import { ICreateTodo, ITodo } from '@/types/todos'
+import { ITodo } from '@/types/todos'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { produce } from 'immer'
+import { addTodo, clearTodos, deleteTodo, fetchTodos, toggleTodo, updateTodo } from './Todos.data'
 
 export function useTodos() {
 	return useQuery({
@@ -10,13 +10,28 @@ export function useTodos() {
 	})
 }
 
-export function useAddTodo() {
+export function useSaveTodo() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: addTodo,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['todos'] })
+		mutationFn: async ({ isEdit, title, userId, todoId }: { isEdit?: boolean; todoId?: string; title: string; userId?: string }) => {
+			if (isEdit) {
+				return updateTodo({ title, todoId })
+			} else {
+				return addTodo({ title, user_id: userId })
+			}
+		},
+		onSuccess: (data, params) => {
+			queryClient.setQueryData(['todos'], (prev: ITodo[]) => {
+				return produce(prev, (draft) => {
+					if (params?.isEdit) {
+						const currentTodoIdx = draft.findIndex((todo) => todo.id === params.todoId)
+						draft.splice(currentTodoIdx, 1, data[0])
+					} else {
+						draft.push(data[0])
+					}
+				})
+			})
 		},
 	})
 }
@@ -62,48 +77,4 @@ export function useClearTodos() {
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
 		},
 	})
-}
-
-// apis
-
-async function fetchTodos() {
-	const supabase = createClient()
-	const { data } = await supabase.from('todos').select('*').order('created_at', { ascending: true })
-	return data as ITodo[]
-}
-
-async function toggleTodo(params: { todoId: string; isCompleted: boolean }) {
-	const supabase = createClient()
-	const { data, error } = await supabase.from('todos').update({ is_completed: params?.isCompleted }).eq('id', params?.todoId).select()
-	if (error) {
-		throw error
-	}
-	return data as ITodo[]
-}
-
-async function addTodo(todo: ICreateTodo) {
-	const supabase = createClient()
-	const { data, error } = await supabase.from('todos').insert([todo]).select()
-	if (error) {
-		throw error
-	}
-	return data as ITodo[]
-}
-
-async function deleteTodo(params: { todoId: string }) {
-	const supabase = createClient()
-	const { data, error } = await supabase.from('todos').delete().eq('id', params?.todoId).select()
-	if (error) {
-		throw error
-	}
-	return data as ITodo[]
-}
-
-async function clearTodos() {
-	const supabase = createClient()
-	const { data, error } = await supabase.from('todos').delete().eq('is_completed', true).select()
-	if (error) {
-		throw error
-	}
-	return data as ITodo[]
 }

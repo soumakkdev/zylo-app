@@ -1,31 +1,37 @@
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { ICreateTodo } from '@/types/todos'
-import { FormApi, useForm } from '@tanstack/react-form'
-import { isEmpty } from 'radash'
-import React from 'react'
-import { useAddTodo } from '../utils/Todos.query'
 import { useAuth } from '@/lib/AuthProvider'
+import { ITodo } from '@/types/todos'
+import { useForm } from '@tanstack/react-form'
 import { Loader } from 'lucide-react'
+import { isEmpty } from 'radash'
+import { useSaveTodo } from '../utils/Todos.query'
 
-export default function AddTodoForm({ closeForm }: { closeForm: () => void }) {
-	const addTodoMutation = useAddTodo()
+export default function AddTodoForm({ closeForm, isEdit, todo }: { isEdit?: boolean; todo?: ITodo; closeForm: () => void }) {
+	const { mutate: saveTodo, isPending } = useSaveTodo()
 	const { user } = useAuth()
 
 	const form = useForm({
 		defaultValues: {
-			title: '',
+			title: isEdit ? todo.title : '',
 		},
 		onSubmit: async ({ value }) => {
-			const reqBody: ICreateTodo = {
-				title: value.title,
-				user_id: user?.id,
-			}
-			addTodoMutation.mutate(reqBody, {
-				onSettled: () => {
-					form.reset()
+			saveTodo(
+				{
+					isEdit,
+					todoId: todo?.id ?? null,
+					title: value.title,
+					userId: user?.id,
 				},
-			})
+				{
+					onSettled: () => {
+						form.reset()
+						if (isEdit) {
+							closeForm()
+						}
+					},
+				}
+			)
 		},
 	})
 
@@ -63,11 +69,11 @@ export default function AddTodoForm({ closeForm }: { closeForm: () => void }) {
 			</form.Field>
 
 			<div className="flex gap-2">
-				<Button size="sm" variant="ghost" className="h-7" type="button" onClick={closeForm} disabled={addTodoMutation.isPending}>
+				<Button size="sm" variant="ghost" className="h-7" type="button" onClick={closeForm} disabled={isPending}>
 					Cancel
 				</Button>
-				<Button size="sm" variant="default" className="h-7" disabled={addTodoMutation.isPending}>
-					{addTodoMutation.isPending ? <Loader className="h-4 w-4 animate-spin mr-1" /> : null} Save
+				<Button size="sm" variant="default" className="h-7" disabled={isPending}>
+					{isPending ? <Loader className="h-4 w-4 animate-spin mr-1" /> : null} {isEdit ? 'Save' : 'Add'}
 				</Button>
 			</div>
 		</form>

@@ -7,7 +7,7 @@ export interface ITodo {
 	user_id: string
 }
 
-export interface ICreateTodo {
+export interface ICreateTodoBody {
 	title: string
 	user_id: string
 }

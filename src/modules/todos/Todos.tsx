@@ -17,7 +17,7 @@ export default function Todos() {
 	return (
 		<div className="flex-1 flex flex-col">
 			<div className="h-full py-6">
-				<div className="max-w-3xl mx-auto">
+				<div className="max-w-3xl mx-auto px-4">
 					<h1 className="text-xl font-bold mb-4">Todos</h1>
 
 					{isLoading ? (
@@ -38,7 +38,7 @@ export default function Todos() {
 								) : (
 									<button
 										onClick={() => setIsAddTask(true)}
-										className="w-full flex items-center gap-2 hover:text-primary cursor-pointer py-2"
+										className="w-full flex items-center gap-2 text-muted-foreground hover:text-primary cursor-pointer py-2"
 									>
 										<Plus className="h-4 w-4" />
 										<p className="text-sm">Add Task</p>
@@ -52,7 +52,7 @@ export default function Todos() {
 										<h3 className="font-semibold text-sm text-muted-foreground">Completed</h3>
 										<Button
 											onClick={() => setIsClearModalOpen(true)}
-											variant="ghost"
+											variant="link"
 											size="sm"
 											className="text-muted-foreground hover:text-destructive"
 										>

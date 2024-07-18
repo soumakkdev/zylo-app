@@ -6,11 +6,14 @@ import { cn } from '@/lib/utils'
 import { ITodo } from '@/types/todos'
 import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
 import { useDeleteTodo, useToggleTodo } from '../utils/Todos.query'
+import { useState } from 'react'
+import AddTodoForm from './AddTodoForm'
 
 export default function TodoItem({ todo }: { todo: ITodo }) {
 	const toggleTodoMutation = useToggleTodo()
 	const deleteTodoMutation = useDeleteTodo()
 	const isChecked = !!todo.is_completed
+	const [isEditMode, setIsEditMode] = useState(false)
 
 	function handleToggleTodo(isChecked: boolean) {
 		toggleTodoMutation.mutate({
@@ -23,6 +26,10 @@ export default function TodoItem({ todo }: { todo: ITodo }) {
 		deleteTodoMutation.mutate({
 			todoId,
 		})
+	}
+
+	if (isEditMode) {
+		return <AddTodoForm closeForm={() => setIsEditMode(false)} isEdit todo={todo} />
 	}
 
 	return (
@@ -48,7 +55,7 @@ export default function TodoItem({ todo }: { todo: ITodo }) {
 						</IconButton>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
-						<DropdownMenuItem className="text-xs">
+						<DropdownMenuItem className="text-xs" onClick={() => setIsEditMode(true)}>
 							<Pencil strokeWidth={1.5} className="h-4 w-4 mr-2" />
 							Edit
 						</DropdownMenuItem>
