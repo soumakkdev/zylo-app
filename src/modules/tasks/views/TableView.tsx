@@ -36,7 +36,6 @@ export default function TableView({
 			cell: ({ getValue }) => {
 				const priority = getValue() as TaskPriority
 				if (!priority) return null
-				console.log(priority)
 				return (
 					<p className="capitalize text-sm flex items-center gap-2">
 						<Flag

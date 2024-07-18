@@ -18,16 +18,17 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 		const { error } = await supabase.auth.signUp({
 			email,
 			password,
-			options: {
-				emailRedirectTo: `${origin}/auth/callback`,
-			},
+			// options: {
+			// 	emailRedirectTo: `${origin}/auth/callback`,
+			// },
 		})
 
 		if (error) {
 			return redirect('/login?message=Could not authenticate user&type=error')
 		}
 
-		return redirect('/login?message=Check email to continue sign in process')
+		return redirect('/')
+		// return redirect('/login?message=Check email to continue sign in process')
 	}
 
 	return (

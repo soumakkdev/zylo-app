@@ -29,11 +29,11 @@ export default function Tasks() {
 		)
 
 	return (
-		<div className="flex-1 flex flex-col">
+		<div className="flex-1 flex flex-col overflow-hidden">
 			<header className="flex items-center justify-between px-4 pt-4">
 				<h1 className="text-xl font-bold">Tasks</h1>
-				<Button onClick={() => setIsAddTaskDialogOpen(true)}>
-					<Plus className="h-5 w-5 mr-1" />
+				<Button onClick={() => setIsAddTaskDialogOpen(true)} className="rounded-full">
+					<Plus className="h-5 w-5 mr-1 -ml-1" />
 					Add Task
 				</Button>
 			</header>

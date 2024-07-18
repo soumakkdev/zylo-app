@@ -33,7 +33,7 @@ export default function TodoItem({ todo }: { todo: ITodo }) {
 	}
 
 	return (
-		<div key={todo.id} className="flex items-center gap-4 border-b py-2">
+		<div key={todo.id} className="flex items-center gap-4 border-b py-2 group" onDoubleClick={() => setIsEditMode(true)}>
 			<Checkbox id={todo.id} checked={isChecked} className="rounded-full" onCheckedChange={handleToggleTodo} />
 
 			<div className="flex-1">
