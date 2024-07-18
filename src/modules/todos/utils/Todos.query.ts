@@ -10,12 +10,6 @@ export function useTodos() {
 	})
 }
 
-async function fetchTodos() {
-	const supabase = createClient()
-	const { data } = await supabase.from('todos').select('*').order('created_at', { ascending: true })
-	return data as ITodo[]
-}
-
 export function useAddTodo() {
 	const queryClient = useQueryClient()
 
@@ -43,14 +37,55 @@ export function useToggleTodo() {
 	})
 }
 
+export function useDeleteTodo() {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: deleteTodo,
+		onMutate: (params) => {
+			queryClient.setQueryData(['todos'], (prev: ITodo[]) => {
+				return produce(prev, (draft) => {
+					const currentTodoIdx = draft.findIndex((todo) => todo.id === params.todoId)
+					draft.splice(currentTodoIdx, 1)
+				})
+			})
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['todos'] })
+		},
+	})
+}
+
+// apis
+
+async function fetchTodos() {
+	const supabase = createClient()
+	const { data } = await supabase.from('todos').select('*').order('created_at', { ascending: true })
+	return data as ITodo[]
+}
+
 async function toggleTodo(params: { todoId: string; isCompleted: boolean }) {
 	const supabase = createClient()
-	const { data } = await supabase.from('todos').update({ is_completed: params?.isCompleted }).eq('id', params?.todoId).select()
+	const { data, error } = await supabase.from('todos').update({ is_completed: params?.isCompleted }).eq('id', params?.todoId).select()
+	if (error) {
+		throw error
+	}
 	return data as ITodo[]
 }
 
 async function addTodo(todo: ICreateTodo) {
 	const supabase = createClient()
 	const { data, error } = await supabase.from('todos').insert([todo]).select()
+	if (error) {
+		throw error
+	}
+	return data as ITodo[]
+}
+
+async function deleteTodo(params: { todoId: string }) {
+	const supabase = createClient()
+	const { data, error } = await supabase.from('todos').delete().eq('id', params?.todoId).select()
+	if (error) {
+		throw error
+	}
 	return data as ITodo[]
 }
