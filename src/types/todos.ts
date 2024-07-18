@@ -1,7 +1,7 @@
 export interface ITodo {
 	id: string
 	title: string
-	is_complete?: string | null
+	is_completed?: boolean
 	created_at: string
 	updated_at: string
 	user_id: string
