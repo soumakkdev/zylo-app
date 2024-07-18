@@ -32,7 +32,7 @@ export default function SideNav({ user }: { user: User }) {
 	}
 
 	return (
-		<div className="w-14 border-r h-full py-4 flex flex-col">
+		<div className="w-14 border-r h-full py-4 flex flex-col flex-shrink-0">
 			<div className="flex flex-col items-center gap-3 flex-1">
 				<NavButton Icon={ClipboardList} isActive={pathname?.includes('tasks')} onClick={() => router.push(`/dashboard/tasks`)} />
 				<NavButton Icon={Notebook} isActive={pathname?.includes('notes')} onClick={() => router.push(`/dashboard/notes`)} />

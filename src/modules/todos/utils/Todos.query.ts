@@ -54,6 +54,15 @@ export function useDeleteTodo() {
 		},
 	})
 }
+export function useClearTodos() {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: clearTodos,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['todos'] })
+		},
+	})
+}
 
 // apis
 
@@ -84,6 +93,15 @@ async function addTodo(todo: ICreateTodo) {
 async function deleteTodo(params: { todoId: string }) {
 	const supabase = createClient()
 	const { data, error } = await supabase.from('todos').delete().eq('id', params?.todoId).select()
+	if (error) {
+		throw error
+	}
+	return data as ITodo[]
+}
+
+async function clearTodos() {
+	const supabase = createClient()
+	const { data, error } = await supabase.from('todos').delete().eq('is_completed', true).select()
 	if (error) {
 		throw error
 	}

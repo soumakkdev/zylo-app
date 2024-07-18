@@ -1,12 +1,11 @@
 import { Checkbox } from '@/components/ui/checkbox'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { IconButton } from '@/components/ui/iconbutton'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { ITodo } from '@/types/todos'
 import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
 import { useDeleteTodo, useToggleTodo } from '../utils/Todos.query'
-import Dropdown from '@/components/widgets/Dropdown'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 export default function TodoItem({ todo }: { todo: ITodo }) {
 	const toggleTodoMutation = useToggleTodo()
@@ -41,23 +40,25 @@ export default function TodoItem({ todo }: { todo: ITodo }) {
 				</Label>
 			</div>
 
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<IconButton className="h-6 w-6">
-						<Ellipsis className="h-4 w-4" />
-					</IconButton>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end">
-					<DropdownMenuItem className="text-xs">
-						<Pencil strokeWidth={1.5} className="h-4 w-4 mr-2" />
-						Edit
-					</DropdownMenuItem>
-					<DropdownMenuItem className="text-xs text-destructive focus:text-destructive" onClick={() => handleDeleteTodo(todo.id)}>
-						<Trash2 strokeWidth={1.5} className="h-4 w-4 mr-2" />
-						Delete
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+			{todo?.is_completed ? null : (
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<IconButton className="h-6 w-6">
+							<Ellipsis className="h-4 w-4" />
+						</IconButton>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						<DropdownMenuItem className="text-xs">
+							<Pencil strokeWidth={1.5} className="h-4 w-4 mr-2" />
+							Edit
+						</DropdownMenuItem>
+						<DropdownMenuItem className="text-xs text-destructive focus:text-destructive" onClick={() => handleDeleteTodo(todo.id)}>
+							<Trash2 strokeWidth={1.5} className="h-4 w-4 mr-2" />
+							Delete
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			)}
 		</div>
 	)
 }
